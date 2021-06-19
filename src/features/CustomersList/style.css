@@ -1,0 +1,12 @@
+.main-div{
+    width: 900px; 
+	border-collapse: collapse; 
+	margin:50px auto;
+}
+.header{
+    background-color:#2980b9;
+}
+.image{
+    width: 500px;
+    height: 500px;
+}
