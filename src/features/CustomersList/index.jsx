@@ -10,15 +10,22 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar';
+import Pagination from "../../components/Pagination";
 import "./style.css";
 
 const CustomerList = () => {
   const context = useContext(Context);
   const { state, dispatch } = context;
   const [toggle, setToggle] = useState(true);
+  const [currentCustomerList, setCurrentCustomerList] = useState([]);
+  const [currentPage, setCurrentPage] = useState({
+    pageNo: 1,
+  });
+
   useEffect(() => {
     getCustomerList(dispatch);
-  }, []);
+    setCurrentCustomerList(state.customerList);
+  }, [state,dispatch]);
 
   const maxBid = (bids) => {
     const maxBids = bids.map((bid) => bid.amount);
@@ -33,6 +40,17 @@ const CustomerList = () => {
   const handleToggle = () => {
     setToggle(!toggle);
   };
+
+  const numberOfPages = Math.ceil(currentCustomerList.length / 7);
+
+  const handlePageChange = (param) => {
+    setCurrentPage({pageNo:param});
+  }
+  
+  const indexOfLastPost = currentPage.pageNo * 7;
+  const indexOfFirstPost = indexOfLastPost - 7;
+  const currentPosts = currentCustomerList.slice(indexOfFirstPost, indexOfLastPost);
+  
   return (
     <div className="main-div">
     <TableContainer component={Paper}>
@@ -56,8 +74,8 @@ const CustomerList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {state.customerList.map((customer) => (
-            <TableRow key={customer.firstname}>
+          {currentPosts.map((customer, index) => (
+            <TableRow key={index}>
               <TableCell component="th" scope="customer">
               <Avatar alt="Remy Sharp" src={customer.avatarUrl} className="image" />
                 {customer.firstname} {customer.lastname}
@@ -73,6 +91,7 @@ const CustomerList = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    <Pagination pageCount={numberOfPages} onPageChange={(pageNo) => handlePageChange(pageNo)} />
     </div>
   );
 };
