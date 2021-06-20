@@ -1,4 +1,4 @@
-# Payouts Frontend
+# Trav Clan
 
 This project serves as the frontend for Trav Clan product.
 
